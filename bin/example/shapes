@@ -1,0 +1,60 @@
+#!/usr/bin/php
+<?php
+
+/**
+ * php-svg - A simple component that extends PHP's DOM-ext to produce SVG documents
+ *
+ * @version 0.1.0-alpha
+ * @author Er Galvão Abbott <galvao@php.net>
+ * @license Apache-2.0
+ * @link https://github.com/galvao-eti/php-svg
+ */
+
+declare(strict_types = 1);
+
+require __DIR__ . '/../../vendor/autoload.php';
+
+use PhpSvg\PhpSvg;
+
+use PhpSvg\Element\Base\{
+    Circle,
+    Ellipse,
+    Polygon,
+    Rectangle,
+    Text
+};
+
+/**
+ * Define some elements
+ */
+
+$elements = [];
+
+$elements[] = new Rectangle(50, 50, 0, 0, ['stroke' => 'black', 'fill' => 'rgb(180, 0, 0)']);
+$elements[] = new Rectangle(50, 50, 50, 50, ['stroke' => 'black', 'fill' => 'rgb(0, 180, 0)']);
+$elements[] = new Circle(50, 135, 135, ['stroke' => 'black', 'fill' => 'rgb(0, 0, 180)']);
+$elements[] = new Ellipse(150, 30, 185, 235, ['stroke' => 'black', 'fill' => 'rgb(180, 0, 180)']);
+$elements[] = new Polygon([50, 160, 55, 180, 70, 180, 60, 190, 65, 205, 50, 195, 35, 205, 40, 190, 30, 180, 45, 180], ['fill' => 'blue']);
+
+$text = new Text(200, 200, 0, 0, ['fill' => 'orange', 'font-size' => '60px']);
+$text->addContent('PhpSvg');
+
+$elements[] = $text;
+
+/**
+ * Initialize php-svg, which returns the associated DOM Document.
+ */
+
+$svg = PhpSvg::init(900, 900);
+
+foreach ($elements as $element) {
+    /**
+     * Appends each element using the appendChild method, inherited from DOM Element
+     */
+    $svg->appendChild($element);
+}
+
+/**
+ * Echoes the output to STDOUT so it can be piped, directed, etc...
+ */
+echo PhpSvg::draw();
